@@ -13,7 +13,6 @@ BOT_NAME = 'olympians'
 SPIDER_MODULES = ['olympians.spiders']
 NEWSPIDER_MODULE = 'olympians.spiders'
 COOKIES_ENABLED = False
-DOWNLOAD_DELAY = 0.25
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'olympians (+http://www.yourdomain.com)'

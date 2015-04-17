@@ -9,11 +9,22 @@ import scrapy
 
 
 class OlympiansItem(scrapy.Item):
-    fullName = scrapy.Field()
-    gender = scrapy.Field()
-    height = scrapy.Field()
-    birthDate = scrapy.Field()
-    deathDate = scrapy.Field()
-    country = scrapy.Field()
-    sport = scrapy.Field()
-    pass
+	fullName = scrapy.Field()
+	gender = scrapy.Field()
+	height = scrapy.Field()
+	birthDate = scrapy.Field()
+	deathDate = scrapy.Field()
+	country = scrapy.Field()
+	sport = scrapy.Field()
+	results = scrapy.Field()
+	pass
+
+class ResultsItem(scrapy.Item):
+	games = scrapy.Field()
+	age = scrapy.Field()
+	#city = scrapy.Field()
+	sport = scrapy.Field()
+	#event = scrapy.Field()
+	#team = scrapy.Field()
+	#rank = scrapy.Field()
+	pass

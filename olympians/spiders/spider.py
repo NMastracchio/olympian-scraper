@@ -2,6 +2,7 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.http import Request
 from olympians.items import OlympiansItem
+from olympians.items import ResultsItem
 
 class OlympianCrawler(CrawlSpider):
 	name = "olympian"
@@ -16,6 +17,11 @@ class OlympianCrawler(CrawlSpider):
 
 		
 	def parse_olympian(self, response):
+		results = ResultsItem()
+		results['games'] = response.xpath('//table[@id="results"]/tbody/tr/td[1]/a/text()').extract()
+		results['age'] = response.xpath('//table[@id="results"]/tbody/tr/td[2]/text()').extract()
+		results['sport'] = response.xpath('//table[@id="results"]/tbody/tr/td[4]/a/text()').extract()
+
 		olympian = OlympiansItem()
 		olympian['fullName'] = response.xpath('//div[@id="info_box"]/p/text()[1]').extract()
 		olympian['gender'] = response.xpath('//div[@id="info_box"]/p/span[contains(., "Gender:")]/following-sibling::text()[1]').extract()
@@ -24,6 +30,7 @@ class OlympianCrawler(CrawlSpider):
 		olympian['deathDate'] = response.xpath('//div[@id="info_box"]/p/span[@id="necro-death"]/@data-death').extract()
 		olympian['country'] = response.xpath('//div[@id="info_box"]/p/span[contains(., "Country:")]/following-sibling::a[1]/text()[1]').extract()
 		olympian['sport'] = response.xpath('//div[@id="info_box"]/p/span[contains(., "Sport:")]/following-sibling::a[1]/text()[1]').extract()
+		olympian['results'] = [dict(results)]
 		return olympian
 
 	def extract_olympians(self, response):
