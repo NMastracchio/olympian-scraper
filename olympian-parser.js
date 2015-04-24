@@ -8,15 +8,17 @@ function uniq(a) {
     });
 }
 
-fs.readFile('scraped_data.json',function(err, data){
+fs.readFile('./data/scraped_data.json',function(err, data){
 	if (err) throw err; 
 	var obj = JSON.parse(data);
 	var newArr = [];
+	var aSummer2008 = [];
+	var bPush = false;
 	/* Only do the first 100 records for testing */
-	for(var n = 0; n < 100; n++){
+	// for(var n = 0; n < 100; n++){
 	/* ^^ Comment out this bitch ^^ */
 	/* vv Then uncomment this bitch entire file parsing vv */
-	// for (var n = 0; n < obj.length; n++){ 
+	for (var n = 0; n < obj.length; n++){ 
 		var objToPush = {};
 		for (var key in obj[n]){
 			if (obj[n][key].length = 1){
@@ -42,11 +44,30 @@ fs.readFile('scraped_data.json',function(err, data){
 						/* Key in "results" obj must be one, add the first and only element to the new obj */
 						objToPush["results"][resultKey] = oResults[resultKey][0];
 					}
+					if (resultKey == "games"){
+						if (oResults["games"].length == 1){
+							if (oResults["games"][0] == "2008 Summer"){
+								bPush = true;
+							}
+						} else {
+							if (oResults["games"].indexOf("2008 Summer") > -1){
+								bPush = true;
+							}
+						} 
+					}
 				}
 			}
+		}
+		if (bPush){
+			/* If year matches 2008 Summer */
+			aSummer2008.push(objToPush);
+			bPush = false;
 		}
 		newArr.push(objToPush);
 	}
 	/* Write new array to file */
-	fs.writeFile('parsed_data.json', JSON.stringify(newArr));
+	fs.writeFile('./data/parsed_data.json', JSON.stringify(newArr));
+	fs.writeFile('./data/summer_2008.json', JSON.stringify(aSummer2008));
+	console.log('Wrote ' + newArr.length + ' records to parsed_data.json.');
+	console.log('Wrote ' + aSummer2008.length + ' records to summer_2008.json.');
 });
